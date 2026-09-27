@@ -10,10 +10,11 @@ class User(db.Model):
     username = db.Column(db.String)
     _password_hash = db.Column(db.String)
 
-    # Build method to protect password_hash property
+    # protect the password_property by raising an Exception
     @hybrid_property
     def password_hash(self):
-        pass
+        raise AttributeError('Password hashes may not be viewed.')
+
 
     # Build method to set password hash property using bcrypt.generate_password_hash()
     @password_hash.setter
