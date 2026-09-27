@@ -54,6 +54,20 @@ class Login(Resource):
 api.add_resource(Login, '/login', endpoint='login')  # connect Login to /login
 
 
+# Create Check Session Endpoint
+class CheckSession(Resource):
+
+    def get(self):
+        user_id = session.get('user_id')  # None if no one is logged in
+
+        user = User.query.filter(User.id == user_id).first()  # find the logged-in user
+
+        if user:
+            return UserSchema().dump(user), 200  # logged in: return user as JSON
+
+        return {}, 204  # not logged in: empty response
+
+api.add_resource(CheckSession, '/check_session', endpoint='check_session')  # connect CheckSession to /check_session
 
 
 if __name__ == '__main__':
