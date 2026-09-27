@@ -16,10 +16,11 @@ class User(db.Model):
         raise AttributeError('Password hashes may not be viewed.')
 
 
-    # Build method to set password hash property using bcrypt.generate_password_hash()
+    # use bcrypt.generate_password_hash to set the property
     @password_hash.setter
     def password_hash(self, password):
-        pass
+        password_hash = bcrypt.generate_password_hash(password.encode('utf-8'))
+        self._password_hash = password_hash.decorde('utf-8')
 
     # Build authenticate method that uses bcrypt.check_password_hash()
     def authenticate(self, password):
