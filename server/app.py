@@ -34,8 +34,24 @@ class Signup(Resource):
 
         return UserSchema().dump(user), 201     # status code for created successfully
 
-api.add_resource(Signup, '/signup', endpoint='signup')
+api.add_resource(Signup, '/signup', endpoint='signup') # connect Signup to /signup
 
+
+# Create Login Endpoint
+class Login(Resource):
+
+    def post(self):
+        json = request.get_json()  # read username and password
+
+        user = User.query.filter(User.username == json['username']).first()  # find user by username
+
+        if user and user.authenticate(json['password']):  # user exists AND password matches
+            session['user_id'] = user.id  # log the user in
+            return UserSchema().dump(user), 200  # return user as JSON
+
+        return {'error': 'Invalid username or password'}, 401  # login failed
+
+api.add_resource(Login, '/login', endpoint='login')  # connect Login to /login
 
 
 
