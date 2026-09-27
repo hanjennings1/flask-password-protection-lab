@@ -59,7 +59,6 @@ class CheckSession(Resource):
 
     def get(self):
         user_id = session.get('user_id')  # None if no one is logged in
-
         user = User.query.filter(User.id == user_id).first()  # find the logged-in user
 
         if user:
@@ -68,6 +67,14 @@ class CheckSession(Resource):
         return {}, 204  # not logged in: empty response
 
 api.add_resource(CheckSession, '/check_session', endpoint='check_session')  # connect CheckSession to /check_session
+
+
+# Create Logout Endpoint
+class Logout(Resource):
+    def delete(self):
+        session['user_id'] = None  # clear the logged-in user
+        return {}, 204  # success, nothing to send back
+api.add_resource(Logout, '/logout', endpoint='logout')  # connect Logout to /logout
 
 
 if __name__ == '__main__':
